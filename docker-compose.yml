@@ -1,0 +1,81 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile
+    command: gunicorn -b 0.0.0.0:8000 api.main:app
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      - redis
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+
+  worker-scrape:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile
+    command: rq worker scrape_queue --url redis://redis:6379/0
+    env_file: .env
+    depends_on:
+      - redis
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+
+  worker-match:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile
+    command: rq worker match_queue --url redis://redis:6379/0
+    env_file: .env
+    depends_on:
+      - redis
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+
+  worker-tailor:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile
+    command: rq worker tailor_queue --url redis://redis:6379/0
+    env_file: .env
+    depends_on:
+      - redis
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+
+  worker-apply:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile
+    command: rq worker apply_queue --url redis://redis:6379/0
+    env_file: .env
+    depends_on:
+      - redis
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile
+    command: streamlit run dashboard/app.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    env_file: .env
+    depends_on:
+      - redis
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs

@@ -1,0 +1,52 @@
+{
+  "manifest_version": 3,
+  "name": "Resume Auto-Apply Agent",
+  "version": "2.0.0",
+  "description": "Auto-fills job applications on Lever, Greenhouse, Workday, and Ashby. Detects CAPTCHAs and hands them to you for one click, then submits.",
+
+  "permissions": ["storage", "activeTab", "scripting", "notifications"],
+
+  "host_permissions": [
+    "https://jobs.lever.co/*",
+    "https://*.greenhouse.io/*",
+    "https://*.myworkdayjobs.com/*",
+    "https://*.workday.com/*",
+    "https://jobs.ashbyhq.com/*",
+    "https://*.ashbyhq.com/*",
+    "http://localhost/*",
+    "http://127.0.0.1/*"
+  ],
+
+  "background": { "service_worker": "background.js" },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://jobs.lever.co/*",
+        "https://*.greenhouse.io/*",
+        "https://*.myworkdayjobs.com/*",
+        "https://*.workday.com/*",
+        "https://jobs.ashbyhq.com/*",
+        "https://*.ashbyhq.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Auto-Apply Agent",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "name": "Nathan Sam",
+  "email": "Yemsam17@yahoo.com",
+  "phone": "860-931-3627",
+  "location": "New Britain, CT",
+  "linkedin": "https://linkedin.com/in/nathan-sam-42510123b",
+  "github": "",
+  "summary": "A Cybersecurity professional with 2 years of experience in health IT pursuing an MSc in Artificial Intelligence, with applied experience building and deploying intelligent automation systems. Proficient in Python, machine learning, and data-driven model development, with hands-on experience training models on real-world datasets.",
+  "education": [
+    {
+      "school": "University of New Haven",
+      "location": "West Haven, CT",
+      "degree": "MSc Artificial Intelligence",
+      "graduation": "Present"
+    },
+    {
+      "school": "Central Connecticut State University",
+      "location": "New Britain, CT",
+      "degree": "BS Biology, Cybersecurity Minor",
+      "graduation": "December 2024"
+    }
+  ],
+  "experience": [
+    {
+      "title": "Helpdesk / Tech Support",
+      "company": "AFC Urgent Care",
+      "location": "Connecticut",
+      "dates": "October 2023 - Present",
+      "bullets": [
+        "Delivered Tier 1/2 technical support to 200+ end users across multiple AFC Urgent Care clinics statewide, diagnosing and resolving hardware, software, and network issues with a 90%+ first-call resolution rate using ServiceNow",
+        "Reduced average ticket response time through systematic issue tracking, proactive documentation, and structured follow-up within a fast-paced healthcare IT environment",
+        "Strengthened endpoint security posture by administering system patches and updates, and supporting deployment of VPN, Wi-Fi infrastructure, and endpoint protection solutions across clinic locations"
+      ]
+    }
+  ],
+  "skills": {
+    "languages": ["Python"],
+    "tools": ["ServiceNow"],
+    "areas": ["Data Analysis", "Machine Learning", "Endpoint Security", "VPN", "Network Infrastructure", "Technical Support", "Incident Response", "Patch Management"]
+  },
+  "certifications": ["CompTIA Security+"],
+  "projects": [
+    {
+      "name": "Resume Auto-Apply System",
+      "description": "Built a Python-based job automation pipeline that scrapes cybersecurity listings, scores them with a custom algorithm, uses Claude Opus 4.8 to tailor resumes and cover letters, and submits via Playwright browser automation and a Chrome extension",
+      "technologies": ["Python", "Playwright", "Claude API", "SQLite", "Streamlit", "Chrome Extensions"]
+    }
+  ]
+}

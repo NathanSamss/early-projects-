@@ -1,0 +1,12 @@
+flask==3.0.3
+sqlalchemy==2.0.36
+rq==2.0.0
+redis==5.2.1
+anthropic==0.69.0
+requests==2.32.3
+python-dotenv==1.0.1
+playwright==1.49.0
+streamlit==1.41.1
+pandas==2.2.3
+pytest==8.3.4
+gunicorn==23.0.0

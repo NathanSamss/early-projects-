@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", sans-serif; width: 380px; background: #F8FAFC; color: #1E293B; }
+  .header { background: #1D4ED8; color: #fff; padding: 14px 16px; font-size: 15px; font-weight: 600; }
+  .tabs { display: flex; background: #fff; border-bottom: 1px solid #E2E8F0; }
+  .tab { flex: 1; padding: 10px; text-align: center; font-size: 12px; font-weight: 500; cursor: pointer; color: #64748B; border-bottom: 2px solid transparent; }
+  .tab.active { color: #1D4ED8; border-bottom-color: #1D4ED8; }
+  .panel { display: none; padding: 14px 16px; max-height: 460px; overflow-y: auto; }
+  .panel.active { display: block; }
+  .status { border-radius: 8px; padding: 12px; margin-bottom: 12px; font-size: 13px; line-height: 1.5; }
+  .status.idle { background: #F1F5F9; color: #475569; }
+  .status.filling { background: #DBEAFE; color: #1D4ED8; }
+  .status.ready { background: #DCFCE7; color: #15803D; }
+  .status.captcha { background: #FEF3C7; color: #B45309; }
+  .status.submitted { background: #DCFCE7; color: #15803D; }
+  .status.error { background: #FEE2E2; color: #B91C1C; }
+  .btn { width: 100%; padding: 11px; border-radius: 6px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; margin-bottom: 8px; }
+  .btn-primary { background: #1D4ED8; color: #fff; }
+  .btn-success { background: #16A34A; color: #fff; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  label { display: block; font-size: 11px; font-weight: 600; color: #475569; margin: 8px 0 4px; text-transform: uppercase; letter-spacing: .03em; }
+  input, textarea, select { width: 100%; padding: 8px 10px; border: 1px solid #E2E8F0; border-radius: 6px; font-size: 13px; background: #fff; }
+  textarea { resize: vertical; min-height: 50px; }
+  .save-msg { font-size: 12px; color: #15803D; text-align: center; min-height: 16px; margin-top: 6px; }
+  .hint { font-size: 11px; color: #94A3B8; margin-top: 6px; line-height: 1.4; }
+  .section { font-size: 11px; font-weight: 700; color: #1D4ED8; margin: 14px 0 2px; text-transform: uppercase; letter-spacing: .05em; border-top: 1px solid #E2E8F0; padding-top: 10px; }
+  .proposal { background: #fff; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+  .proposal .q { font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 4px; }
+  .proposal .a { font-size: 12px; color: #475569; margin-bottom: 6px; }
+  .proposal input { font-size: 12px; padding: 6px 8px; margin-bottom: 6px; }
+  .prow { display: flex; gap: 6px; }
+  .prow button { flex: 1; padding: 6px; font-size: 11px; font-weight: 600; border-radius: 5px; border: none; cursor: pointer; }
+  .apply { background: #1D4ED8; color: #fff; }
+  .skip { background: #F1F5F9; color: #475569; }
+  .manual-note { background: #FEF3C7; color: #B45309; font-size: 11px; padding: 6px 8px; border-radius: 5px; }
+</style>
+</head>
+<body>
+<div class="header">🛡️ Auto-Apply Agent</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="apply">Apply</div>
+  <div class="tab" data-tab="profile">Profile</div>
+  <div class="tab" data-tab="screening">Screening</div>
+</div>
+
+<div class="panel active" id="tab-apply">
+  <div id="status" class="status idle">Open a job application page, then click Fill Form.</div>
+  <button class="btn btn-primary" id="btn-fill">Fill Form</button>
+  <div id="proposals"></div>
+  <button class="btn btn-success" id="btn-submit" disabled>Submit Application</button>
+  <div class="hint">Reviewed answers fill in only when you click Apply. Solve any CAPTCHA on the page before Submit.</div>
+</div>
+
+<div class="panel" id="tab-profile">
+  <label>Full Name</label><input id="p-name" placeholder="Nathan Sam">
+  <label>Email</label><input id="p-email" placeholder="you@email.com">
+  <label>Phone</label><input id="p-phone" placeholder="555-555-5555">
+  <label>Current Location</label><input id="p-location" placeholder="New Britain, CT">
+  <label>Current Company</label><input id="p-current_company" placeholder="AFC Urgent Care">
+  <label>LinkedIn URL</label><input id="p-linkedin" placeholder="https://linkedin.com/in/...">
+  <label>GitHub URL</label><input id="p-github" placeholder="https://github.com/...">
+  <label>Cover Letter</label><textarea id="p-cover_letter" placeholder="Default cover letter..."></textarea>
+  <button class="btn btn-primary" id="btn-save">Save Profile</button>
+  <div class="save-msg" id="save-msg"></div>
+</div>
+
+<div class="panel" id="tab-screening">
+  <div class="hint">These answer the screening questions most applications ask. Set them once.</div>
+
+  <label>Work Authorization</label>
+  <select id="p-work_authorization">
+    <option value="No, I am an American Citizen or Permanent Resident.">US Citizen / Permanent Resident</option>
+    <option value="Not for now, I am currently authorized to work in the US.">Authorized, no sponsorship needed now</option>
+    <option value="Yes, I would need a visa sponsorship to work at this location.">Need visa sponsorship</option>
+  </select>
+
+  <label>Visa Type (free text)</label>
+  <input id="p-visa_type" placeholder="N/A - US Citizen">
+
+  <label>Availability / Notice Period</label>
+  <input id="p-availability" placeholder="Available now">
+
+  <label>Salary Expectation</label>
+  <input id="p-salary_expectation" placeholder="$70,000 - $85,000">
+
+  <label>Preferred Coding Language</label>
+  <input id="p-preferred_language" placeholder="Python">
+
+  <label>Willing to Relocate / Work On-site</label>
+  <select id="p-relocate">
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+
+  <label>Years of Experience</label>
+  <input id="p-years_experience" placeholder="2">
+
+  <label>How did you hear about us (default)</label>
+  <input id="p-how_heard" placeholder="Website">
+
+  <div class="section">Diversity (optional — defaults to Prefer not to say)</div>
+  <label>Gender</label>
+  <input id="p-dei_gender" placeholder="Prefer not to say">
+  <label>Ethnicity</label>
+  <input id="p-dei_ethnicity" placeholder="Prefer not to say">
+  <label>Age Bracket</label>
+  <input id="p-dei_age" placeholder="Prefer not to say">
+
+  <button class="btn btn-primary" id="btn-save2" style="margin-top:12px">Save Screening Answers</button>
+  <div class="save-msg" id="save-msg2"></div>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>
